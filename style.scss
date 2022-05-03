@@ -1,137 +1,246 @@
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    text-decoration: none;
-}
-
-@mixin flex {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: row;
-    flex-wrap: wrap;
-}
-
-@mixin sizing($width, $height) {
-    width: $width;
-    height: $height;
-    background-color: rgb(214, 234, 240);
-    border-radius: 10px;
-}
-
-@mixin borderUpLeft($borderW) {
-    border-top: $borderW solid rgb(80, 60, 88);
-    border-left: $borderW solid rgb(71, 55, 78);
-    border-bottom: $borderW solid rgb(17, 14, 24);
-    border-right: $borderW solid rgb(17, 14, 24);
-    box-shadow: 3px 3px 15px rgba(0, 0, 0, 0.6), 0 0 0 1px rgb(17, 14, 24) inset;
-}
-
-body {
-    @include sizing(80vw, 80vh);
-    margin: auto;
-    background-color: rgb(153, 199, 214);
-    @include flex();
-    font-family: Georgia, 'Times New Roman', Times, serif;
-    font-size: 30px;
-    position: relative;
-    z-index: -3;
-}
-
-.wrapper {
-    @include sizing(auto, auto);
-    @include flex();
-    flex-direction: column;
-    background-color: transparent;
-}
-
-.base {
-    @include sizing(600px, 300px);
-    @include flex;
-    @include borderUpLeft(3px);
-    background-image: linear-gradient(120deg, rgb(17, 14, 24), rgb(37, 29, 41));
-    border-radius: 0.5em;
-    gap: 5px;
-    position: relative;
-    /* z-index: 9999; */
-}
-
-.langdiv {
-    @include sizing(62px, 72px);
-    @include flex;
-    @include borderUpLeft(3px);
-    border-top: none;
-    background-image: linear-gradient(120deg, rgb(17, 14, 24), rgb(37, 29, 41));
-    border-radius: 0 0 0.5em 0.5em;
-    position: absolute;
-    bottom: -52px;
-    left: 20px;
-    z-index: -2;
-    span {
-        padding-top: 20px;
-        color: rgb(255, 222, 160);
-        font-size: 20px;
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        text-decoration: none;
     }
-    &:hover {
-        cursor: pointer;
-        border-color: rgba(119, 1, 133, 0.3);
+    /* ----------- colors ------------- */
+    
+    $dark_color_pr:rgb(17, 14, 24);
+    $dark_color_sec:rgb(37, 29, 41);
+    $color_accent: rgb(235, 13, 255);
+    $color_accent_trans: rgba(235, 13, 255, 0.7);
+    $color_light_pr:rgb(255, 234, 195);
+    $color_light_trans:rgba(255, 222, 160, 0.5);
+    $dark_lighter_pr:rgb(80, 60, 88);
+    $dark_lighter_sec:rgb(71, 55, 78);
+    /* ----------- mixin ------------- */
+    
+    @mixin flex {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: row;
+        flex-wrap: wrap;
+    }
+    
+    @mixin sizing($width, $height) {
+        width: $width;
+        height: $height;
+        border-radius: 10px;
+    }
+    
+    @mixin borderUpLeft($borderW) {
+        border-top: $borderW solid rgb(80, 60, 88);
+        border-left: $borderW solid rgb(71, 55, 78);
+        border-bottom: $borderW solid $dark_color_pr;
+        border-right: $borderW solid $dark_color_pr;
+        box-shadow: 3px 3px 15px rgba(0, 0, 0, 0.6), 0 0 0 1px $dark_color_pr inset;
+    }
+    /* ------------------------------------------- */
+    
+    body {
+        @include sizing(80vw, 80vh);
+        margin: auto;
+        /*  background-color: rgb(153, 199, 214); */
+        @include flex();
+        font-family: Georgia, 'Times New Roman', Times, serif;
+        font-size: 30px;
+        position: relative;
+        z-index: -3;
+    }
+    
+    .base {
+        @include sizing(880px, auto);
+        @include flex;
+        @include borderUpLeft(3px);
+        padding: 10px;
+        background-image: linear-gradient(120deg, $dark_color_pr, $dark_color_sec);
+        border-radius: 0.5em;
+        gap: 5px;
+        position: relative;
+    }
+    
+    .textarea {
+        @include sizing(100%, 200px);
+        margin-bottom: 20px;
+        background-color: $color_light_pr;
+        box-shadow: 3px 3px 3px rgba(255, 255, 255, 0.7) inset, -2px -2px 5px rgba(128, 105, 91, 0.3) inset;
+        color: $dark_color_pr;
+    }
+    
+    .langdiv {
+        @include sizing(62px, 72px);
+        @include flex;
+        @include borderUpLeft(3px);
+        border-top: none;
+        background-image: linear-gradient(120deg, $dark_color_pr, $dark_color_sec);
+        border-radius: 0 0 0.5em 0.5em;
+        position: absolute;
+        bottom: -52px;
+        left: 20px;
+        z-index: -2;
         span {
-            color: rgb(235, 13, 255);
-            /* text-shadow: 1px 0px 2px rgb(240, 80, 255), 0px 1px 2px rgb(240, 80, 255); */
+            padding-top: 20px;
+            color: $color_light_pr;
+            font-size: 20px;
+        }
+        &:hover {
+            cursor: pointer;
+            border-color: rgba(119, 1, 133, 0.3);
+            span {
+                color: $color_accent;
+                /* text-shadow: 1px 0px 2px rgb(240, 80, 255), 0px 1px 2px rgb(240, 80, 255); */
+            }
         }
     }
-}
-
-.button {
-    @include sizing(70px, 60px);
-    @include flex;
-    @include borderUpLeft(1px);
-    background-image: linear-gradient(300deg, rgb(13, 10, 20), rgb(47, 35, 53));
-    box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.3), 0 0 0 1px rgb(17, 14, 24);
-    span {
-        color: rgb(255, 222, 160);
-        font-size: 18px;
-    }
-    &:hover {
-        cursor: pointer;
-        border-color: rgba(119, 1, 133, 0.3);
-        box-shadow: 0px 0px 10px rgba(55, 12, 59, 0.9);
-        background-image: linear-gradient(300deg, 300deg, rgb(21, 16, 32), rgb(52, 36, 59));
-        /* background-image: linear-gradient(300deg, rgb(48, 22, 51), rgb(63, 32, 77)); */
+    
+    .button {
+        @include sizing(70px, 60px);
+        @include flex;
+        @include borderUpLeft(2px);
+        background-image: linear-gradient(300deg, $dark_color_pr, $dark_color_sec);
+        box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.3), 0 0 0 1px rgb(17, 14, 24);
         span {
-            /* color: rgba(235, 13, 255, 0.507); */
-            color: rgb(255, 222, 160);
-            text-shadow: 1px 0px 2px rgb(240, 80, 255), 0px 1px 2px rgb(240, 80, 255);
+            color: $color_light_pr;
+            font-size: 15px;
+        }
+        &:hover {
+            cursor: pointer;
+            border-color: rgba(119, 1, 133, 0.3);
+            box-shadow: 0px 0px 10px rgba(55, 12, 59, 0.9);
+            background-image: linear-gradient(300deg, 300deg, rgb(21, 16, 32), rgb(52, 36, 59));
+            /* background-image: linear-gradient(300deg, rgb(48, 22, 51), rgb(63, 32, 77)); */
+            span {
+                /* color: rgba(235, 13, 255, 0.507); */
+                color: $color_light_pr;
+                text-shadow: 1px 0px 2px $color_accent, 0px 1px 2px $color_accent;
+            }
+        }
+        &:active {
+            border-color: $color_accent;
+            box-shadow: 0px 0px 10px $color_accent_trans;
+            background-image: radial-gradient( rgb(21, 16, 32), rgb(58, 7, 58));
+            span {
+                color: $color_accent;
+                text-shadow: 0px 0px 10px $color_accent_trans
+            }
         }
     }
-    &:active {
-        border-color: rgb(235, 13, 255);
-        box-shadow: 0px 0px 10px rgba(235, 13, 255, 0.7);
+    
+    .double_button {
+        @include sizing(70px, 60px);
+        @include flex;
+        flex-direction: column;
+        @include borderUpLeft(2px);
+        background-image: linear-gradient(300deg, $dark_color_pr, rgb(47, 35, 53));
+        box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.3), 0 0 0 1px rgb(17, 14, 24);
+        padding: 3px 12px;
+        span {
+            display: block;
+            color: $color_light_pr;
+            font-size: 18px;
+        }
+        span:first-of-type {
+            align-self: flex-start;
+        }
+        span:last-of-type {
+            align-self: flex-end;
+        }
+        &:hover {
+            cursor: pointer;
+            border-color: rgba(119, 1, 133, 0.3);
+            box-shadow: 0px 0px 10px rgba(55, 12, 59, 0.9), 0 0 7px rgba(55, 12, 59, 0.9) inset;
+            background-image: linear-gradient(300deg, rgb(21, 16, 32), rgb(52, 36, 59));
+        }
+        &:active {
+            border-color: $color_accent;
+            box-shadow: 0px 0px 10px $color_accent_trans, 0 0 7px $color_accent_trans inset;
+            background-image: radial-gradient( rgb(21, 16, 32), rgb(58, 7, 58));
+            span:first-of-type {
+                color: $color_accent;
+                text-shadow: 0px 0px 10px $color_accent_trans
+            }
+            span:last-of-type {
+                color: $color_accent;
+                text-shadow: 0px 0px 10px $color_accent_trans
+            }
+        }
+    }
+    
+    .secondaryEN {
+        span:last-of-type {
+            color: $color_light_trans;
+        }
+        &:hover {
+            span:first-of-type {
+                color: $color_light_pr;
+                text-shadow: 1px 0px 2px $color_accent, 0px 1px 2px $color_accent;
+            }
+            span:last-of-type {
+                color: $color_light_trans;
+                text-shadow: 1px 0px 2px $color_accent, 0px 1px 2px $color_accent;
+            }
+        }
+        &:active {
+            span:first-of-type {
+                color: $color_accent;
+                text-shadow: 0px 0px 10px $color_accent_trans, 0 0 7px $color_accent_trans inset;
+            }
+        }
+    }
+    
+    .secondaryRU {
+        span:first-of-type {
+            color: $color_light_trans;
+        }
+        &:hover {
+            span:first-of-type {
+                color: $color_light_trans;
+                text-shadow: 1px 0px 2px $color_accent, 0px 1px 2px $color_accent;
+            }
+            span:last-of-type {
+                color: $color_light_pr;
+                text-shadow: 1px 0px 2px $color_accent, 0px 1px 2px $color_accent;
+            }
+        }
+        &:active {
+            span:last-of-type {
+                color: $color_accent;
+                text-shadow: 0px 0px 10px $color_accent_trans, 0 0 7px $color_accent_trans inset;
+            }
+        }
+    }
+    
+    .pressed {
+        border-color: $color_accent;
+        box-shadow: 0px 0px 10px $color_accent_trans;
         background-image: radial-gradient( rgb(21, 16, 32), rgb(58, 7, 58));
         span {
-            color: rgb(235, 13, 255);
-            text-shadow: 0px 0px 10px rgba(235, 13, 255, 0.7)
+            color: $color_accent;
+            text-shadow: 0px 0px 10px $color_accent_trans
         }
     }
-}
-
-.pressed {
-    border-color: rgb(235, 13, 255);
-    box-shadow: 0px 0px 10px rgba(235, 13, 255, 0.7);
-    background-image: radial-gradient( rgb(21, 16, 32), rgb(58, 7, 58));
-    span {
-        color: rgb(235, 13, 255);
-        text-shadow: 0px 0px 10px rgba(235, 13, 255, 0.7)
+    
+    .arrow_wrapper {
+        width: 168px;
+        height: 52px;
+        padding-left: 2px;
+        display: grid;
+        grid-template-columns: repeat(3, 52px);
+        gap: 5px;
     }
-}
-
-.base_inside {
-    @include sizing(calc(100% - 6px), calc(100% - 6px));
-    @include flex;
-    background-color: transparent;
-    border-radius: inherit;
-    border: 3px solid rgba(235, 13, 255, 0.2);
-    transform: translate(1px, -1px);
-    box-shadow: 0 0 15px 0 rgba(255, 66, 239, 0.2) inset;
-}
+    
+    .arrleftright {
+        margin: auto;
+        grid-row: 1/span 2;
+        align-self: center;
+    }
+    
+    .arrup {
+        grid-row: 1/1;
+    }
+    
+    .arrdown {
+        grid-row: 2/2;
+    }

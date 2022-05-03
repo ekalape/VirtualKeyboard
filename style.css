@@ -5,13 +5,15 @@
   text-decoration: none;
 }
 
+/* ----------- colors ------------- */
+/* ----------- mixin ------------- */
+/* ------------------------------------------- */
 body {
   width: 80vw;
   height: 80vh;
-  background-color: rgb(214, 234, 240);
   border-radius: 10px;
   margin: auto;
-  background-color: rgb(153, 199, 214);
+  /*  background-color: rgb(153, 199, 214); */
   display: flex;
   justify-content: center;
   align-items: center;
@@ -23,24 +25,9 @@ body {
   z-index: -3;
 }
 
-.wrapper {
-  width: auto;
-  height: auto;
-  background-color: rgb(214, 234, 240);
-  border-radius: 10px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: row;
-  flex-wrap: wrap;
-  flex-direction: column;
-  background-color: transparent;
-}
-
 .base {
-  width: 600px;
-  height: 300px;
-  background-color: rgb(214, 234, 240);
+  width: 880px;
+  height: auto;
   border-radius: 10px;
   display: flex;
   justify-content: center;
@@ -52,17 +39,26 @@ body {
   border-bottom: 3px solid rgb(17, 14, 24);
   border-right: 3px solid rgb(17, 14, 24);
   box-shadow: 3px 3px 15px rgba(0, 0, 0, 0.6), 0 0 0 1px rgb(17, 14, 24) inset;
+  padding: 10px;
   background-image: linear-gradient(120deg, rgb(17, 14, 24), rgb(37, 29, 41));
   border-radius: 0.5em;
   gap: 5px;
   position: relative;
-  /* z-index: 9999; */
+}
+
+.textarea {
+  width: 100%;
+  height: 200px;
+  border-radius: 10px;
+  margin-bottom: 20px;
+  background-color: rgb(255, 234, 195);
+  box-shadow: 3px 3px 3px rgba(255, 255, 255, 0.7) inset, -2px -2px 5px rgba(128, 105, 91, 0.3) inset;
+  color: rgb(17, 14, 24);
 }
 
 .langdiv {
   width: 62px;
   height: 72px;
-  background-color: rgb(214, 234, 240);
   border-radius: 10px;
   display: flex;
   justify-content: center;
@@ -84,7 +80,7 @@ body {
 }
 .langdiv span {
   padding-top: 20px;
-  color: rgb(255, 222, 160);
+  color: rgb(255, 234, 195);
   font-size: 20px;
 }
 .langdiv:hover {
@@ -99,24 +95,23 @@ body {
 .button {
   width: 70px;
   height: 60px;
-  background-color: rgb(214, 234, 240);
   border-radius: 10px;
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: row;
   flex-wrap: wrap;
-  border-top: 1px solid rgb(80, 60, 88);
-  border-left: 1px solid rgb(71, 55, 78);
-  border-bottom: 1px solid rgb(17, 14, 24);
-  border-right: 1px solid rgb(17, 14, 24);
+  border-top: 2px solid rgb(80, 60, 88);
+  border-left: 2px solid rgb(71, 55, 78);
+  border-bottom: 2px solid rgb(17, 14, 24);
+  border-right: 2px solid rgb(17, 14, 24);
   box-shadow: 3px 3px 15px rgba(0, 0, 0, 0.6), 0 0 0 1px rgb(17, 14, 24) inset;
-  background-image: linear-gradient(300deg, rgb(13, 10, 20), rgb(47, 35, 53));
+  background-image: linear-gradient(300deg, rgb(17, 14, 24), rgb(37, 29, 41));
   box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.3), 0 0 0 1px rgb(17, 14, 24);
 }
 .button span {
-  color: rgb(255, 222, 160);
-  font-size: 18px;
+  color: rgb(255, 234, 195);
+  font-size: 15px;
 }
 .button:hover {
   cursor: pointer;
@@ -127,8 +122,8 @@ body {
 }
 .button:hover span {
   /* color: rgba(235, 13, 255, 0.507); */
-  color: rgb(255, 222, 160);
-  text-shadow: 1px 0px 2px rgb(240, 80, 255), 0px 1px 2px rgb(240, 80, 255);
+  color: rgb(255, 234, 195);
+  text-shadow: 1px 0px 2px rgb(235, 13, 255), 0px 1px 2px rgb(235, 13, 255);
 }
 .button:active {
   border-color: rgb(235, 13, 255);
@@ -138,6 +133,88 @@ body {
 .button:active span {
   color: rgb(235, 13, 255);
   text-shadow: 0px 0px 10px rgba(235, 13, 255, 0.7);
+}
+
+.double_button {
+  width: 70px;
+  height: 60px;
+  border-radius: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: row;
+  flex-wrap: wrap;
+  flex-direction: column;
+  border-top: 2px solid rgb(80, 60, 88);
+  border-left: 2px solid rgb(71, 55, 78);
+  border-bottom: 2px solid rgb(17, 14, 24);
+  border-right: 2px solid rgb(17, 14, 24);
+  box-shadow: 3px 3px 15px rgba(0, 0, 0, 0.6), 0 0 0 1px rgb(17, 14, 24) inset;
+  background-image: linear-gradient(300deg, rgb(17, 14, 24), rgb(47, 35, 53));
+  box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.3), 0 0 0 1px rgb(17, 14, 24);
+  padding: 3px 12px;
+}
+.double_button span {
+  display: block;
+  color: rgb(255, 234, 195);
+  font-size: 18px;
+}
+.double_button span:first-of-type {
+  align-self: flex-start;
+}
+.double_button span:last-of-type {
+  align-self: flex-end;
+}
+.double_button:hover {
+  cursor: pointer;
+  border-color: rgba(119, 1, 133, 0.3);
+  box-shadow: 0px 0px 10px rgba(55, 12, 59, 0.9), 0 0 7px rgba(55, 12, 59, 0.9) inset;
+  background-image: linear-gradient(300deg, rgb(21, 16, 32), rgb(52, 36, 59));
+}
+.double_button:active {
+  border-color: rgb(235, 13, 255);
+  box-shadow: 0px 0px 10px rgba(235, 13, 255, 0.7), 0 0 7px rgba(235, 13, 255, 0.7) inset;
+  background-image: radial-gradient(rgb(21, 16, 32), rgb(58, 7, 58));
+}
+.double_button:active span:first-of-type {
+  color: rgb(235, 13, 255);
+  text-shadow: 0px 0px 10px rgba(235, 13, 255, 0.7);
+}
+.double_button:active span:last-of-type {
+  color: rgb(235, 13, 255);
+  text-shadow: 0px 0px 10px rgba(235, 13, 255, 0.7);
+}
+
+.secondaryEN span:last-of-type {
+  color: rgba(255, 222, 160, 0.5);
+}
+.secondaryEN:hover span:first-of-type {
+  color: rgb(255, 234, 195);
+  text-shadow: 1px 0px 2px rgb(235, 13, 255), 0px 1px 2px rgb(235, 13, 255);
+}
+.secondaryEN:hover span:last-of-type {
+  color: rgba(255, 222, 160, 0.5);
+  text-shadow: 1px 0px 2px rgb(235, 13, 255), 0px 1px 2px rgb(235, 13, 255);
+}
+.secondaryEN:active span:first-of-type {
+  color: rgb(235, 13, 255);
+  text-shadow: 0px 0px 10px rgba(235, 13, 255, 0.7), 0 0 7px rgba(235, 13, 255, 0.7) inset;
+}
+
+.secondaryRU span:first-of-type {
+  color: rgba(255, 222, 160, 0.5);
+}
+.secondaryRU:hover span:first-of-type {
+  color: rgba(255, 222, 160, 0.5);
+  text-shadow: 1px 0px 2px rgb(235, 13, 255), 0px 1px 2px rgb(235, 13, 255);
+}
+.secondaryRU:hover span:last-of-type {
+  color: rgb(255, 234, 195);
+  text-shadow: 1px 0px 2px rgb(235, 13, 255), 0px 1px 2px rgb(235, 13, 255);
+}
+.secondaryRU:active span:last-of-type {
+  color: rgb(235, 13, 255);
+  text-shadow: 0px 0px 10px rgba(235, 13, 255, 0.7), 0 0 7px rgba(235, 13, 255, 0.7) inset;
 }
 
 .pressed {
@@ -150,21 +227,27 @@ body {
   text-shadow: 0px 0px 10px rgba(235, 13, 255, 0.7);
 }
 
-.base_inside {
-  width: calc(100% - 6px);
-  height: calc(100% - 6px);
-  background-color: rgb(214, 234, 240);
-  border-radius: 10px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: row;
-  flex-wrap: wrap;
-  background-color: transparent;
-  border-radius: inherit;
-  border: 3px solid rgba(235, 13, 255, 0.2);
-  transform: translate(1px, -1px);
-  box-shadow: 0 0 15px 0 rgba(255, 66, 239, 0.2) inset;
+.arrow_wrapper {
+  width: 168px;
+  height: 52px;
+  padding-left: 2px;
+  display: grid;
+  grid-template-columns: repeat(3, 52px);
+  gap: 5px;
+}
+
+.arrleftright {
+  margin: auto;
+  grid-row: 1/span 2;
+  align-self: center;
+}
+
+.arrup {
+  grid-row: 1/1;
+}
+
+.arrdown {
+  grid-row: 2/2;
 }
 
 /*# sourceMappingURL=style.css.map */
