@@ -12,6 +12,7 @@ body {
   width: 80vw;
   height: 80vh;
   border-radius: 10px;
+  transition: 0.2s;
   margin: auto;
   /*  background-color: rgb(153, 199, 214); */
   display: flex;
@@ -23,12 +24,16 @@ body {
   font-size: 30px;
   position: relative;
   z-index: -3;
+  /*  font-family: 'Source Sans Pro', sans-serif; */
+  font-family: "Jura", sans-serif;
+  font-weight: 500;
 }
 
 .base {
   width: 880px;
   height: auto;
   border-radius: 10px;
+  transition: 0.2s;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -46,10 +51,20 @@ body {
   position: relative;
 }
 
+.win_img {
+  width: 34px;
+  height: 34px;
+  margin: auto;
+  margin-top: 5px;
+  filter: invert(99%) sepia(68%) saturate(1117%) hue-rotate(305deg) brightness(105%) contrast(104%);
+  transition: 0.3s;
+}
+
 .textarea {
   width: 100%;
   height: 200px;
   border-radius: 10px;
+  transition: 0.2s;
   margin-bottom: 20px;
   background-color: rgb(255, 234, 195);
   box-shadow: 3px 3px 3px rgba(255, 255, 255, 0.7) inset, -2px -2px 5px rgba(128, 105, 91, 0.3) inset;
@@ -60,6 +75,7 @@ body {
   width: 62px;
   height: 72px;
   border-radius: 10px;
+  transition: 0.2s;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -77,6 +93,7 @@ body {
   bottom: -52px;
   left: 20px;
   z-index: -2;
+  transition: 0.3s;
 }
 .langdiv span {
   padding-top: 20px;
@@ -96,6 +113,7 @@ body {
   width: 70px;
   height: 60px;
   border-radius: 10px;
+  transition: 0.2s;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -111,7 +129,7 @@ body {
 }
 .button span {
   color: rgb(255, 234, 195);
-  font-size: 15px;
+  font-size: 14px;
 }
 .button:hover {
   cursor: pointer;
@@ -125,6 +143,10 @@ body {
   color: rgb(255, 234, 195);
   text-shadow: 1px 0px 2px rgb(235, 13, 255), 0px 1px 2px rgb(235, 13, 255);
 }
+.button:hover .win_img {
+  filter: invert(28%) sepia(63%) saturate(5354%) hue-rotate(281deg) brightness(99%) contrast(132%);
+  opacity: 0.5;
+}
 .button:active {
   border-color: rgb(235, 13, 255);
   box-shadow: 0px 0px 10px rgba(235, 13, 255, 0.7);
@@ -134,11 +156,16 @@ body {
   color: rgb(235, 13, 255);
   text-shadow: 0px 0px 10px rgba(235, 13, 255, 0.7);
 }
+.button:active .win_img {
+  filter: invert(28%) sepia(63%) saturate(5354%) hue-rotate(281deg) brightness(99%) contrast(132%);
+  opacity: 1;
+}
 
 .double_button {
   width: 70px;
   height: 60px;
   border-radius: 10px;
+  transition: 0.2s;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -157,7 +184,7 @@ body {
 .double_button span {
   display: block;
   color: rgb(255, 234, 195);
-  font-size: 18px;
+  font-size: 16px;
 }
 .double_button span:first-of-type {
   align-self: flex-start;

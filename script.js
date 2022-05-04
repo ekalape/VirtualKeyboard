@@ -56,12 +56,17 @@ class But {
             b.append(s1);
             b.append(s2);
         } else {
-            const s = document.createElement("span");
-            s.innerText = this.text;
-
             b.classList.add("button");
-
-            b.append(s);
+            if (this.text === "win") {
+                const win = document.createElement("div");
+                win.innerHTML =
+                    "<img class='win_img' src='icons/win_icon.svg' alt='win'>";
+                b.append(win);
+            } else {
+                const s = document.createElement("span");
+                s.innerText = this.text;
+                b.append(s);
+            }
         }
 
         return b;
@@ -179,7 +184,7 @@ function arrowsDiv() {
     downArrBut.classList.add("arrdown");
     rightArrBut.classList.add("arrleftright");
     /*   [leftArrBut, rightArrBut].forEach((x) => x.classList.add("arrleftright"));
-              [upArrBut, downArrBut].forEach((x) => x.classList.add("arrupdown")); */
+                        [upArrBut, downArrBut].forEach((x) => x.classList.add("arrupdown")); */
     wrapper.append(leftArrBut, upArrBut, downArrBut, rightArrBut);
     return wrapper;
 }
@@ -207,7 +212,7 @@ const fs = [
     "ins",
     "canc",
 ];
-const functional = ["Shift", "Ctrl", "Caps Lock"];
+const functional = ["Shift", "Ctrl", "Caps Lock", "Alt"];
 
 console.log(
     `doubles.length = ${doubles.length} vs addit.length = ${doubl_addit.length}`
