@@ -27,8 +27,6 @@
     @mixin sizing($width, $height) {
         width: $width;
         height: $height;
-        border-radius: 10px;
-        transition: 0.2s;
     }
     
     @mixin borderUpLeft($borderW) {
@@ -37,6 +35,59 @@
         border-bottom: $borderW solid $dark_color_pr;
         border-right: $borderW solid $dark_color_pr;
         box-shadow: 3px 3px 15px rgba(0, 0, 0, 0.6), 0 0 0 1px $dark_color_pr inset;
+        border-radius: 10px;
+        transition: 0.2s;
+    }
+    /* ------------------ size classes -------------------- */
+    
+    .size_win {
+        width: 62px;
+        height: 62px;
+    }
+    
+    .size_shift {
+        width: 136px;
+        height: 52px;
+    }
+    
+    .size_ctrl_l {
+        width: 106px;
+        height: 62px;
+    }
+    
+    .size_ctrl_s {
+        width: 62px;
+        height: 62px;
+    }
+    
+    .size_alt {
+        width: 62px;
+        height: 62px;
+    }
+    
+    .size_space {
+        width: 300px;
+        height: 52px;
+    }
+    
+    .size_capsenter {
+        width: 108px;
+        height: 52px;
+    }
+    
+    .size_tabdel {
+        width: 106px;
+        height: 52px;
+    }
+    
+    .size_small {
+        width: 52px;
+        height: 26px;
+    }
+    
+    .size_standart {
+        width: 52px;
+        height: 52px;
     }
     /* ------------------------------------------- */
     
@@ -76,10 +127,14 @@
     
     .textarea {
         @include sizing(100%, 200px);
+        padding: 10px;
         margin-bottom: 20px;
         background-color: $color_light_pr;
         box-shadow: 3px 3px 3px rgba(255, 255, 255, 0.7) inset, -2px -2px 5px rgba(128, 105, 91, 0.3) inset;
         color: $dark_color_pr;
+        font-family: 'Jura', sans-serif;
+        font-weight: 500;
+        font-size: 22px;
     }
     
     .langdiv {
@@ -110,9 +165,9 @@
     }
     
     .button {
-        @include sizing(70px, 60px);
         @include flex;
         @include borderUpLeft(2px);
+        user-select: none;
         background-image: linear-gradient(300deg, $dark_color_pr, $dark_color_sec);
         box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.3), 0 0 0 1px rgb(17, 14, 24);
         span {
@@ -151,9 +206,9 @@
     }
     
     .double_button {
-        @include sizing(70px, 60px);
         @include flex;
         flex-direction: column;
+        user-select: none;
         @include borderUpLeft(2px);
         background-image: linear-gradient(300deg, $dark_color_pr, rgb(47, 35, 53));
         box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.3), 0 0 0 1px rgb(17, 14, 24);
