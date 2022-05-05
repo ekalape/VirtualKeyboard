@@ -1,10 +1,35 @@
-import { codes } from "./codes.js";
+import codes from "./codes.js";
+
+const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+const doubles = "\\!@#$%&/()=?*QWERTYUIOP{}>ASDFGHJKL:\"ZXCVBNM~;.".split(""); // 46
+const doubladdit = "Ё1234567890'+ЙЦУКЕНГШЩЗХЪ<ФЫВАПРОЛДЖЭЯЧСМИТЬБЮ,".split(""); // 46
+
+const fs = [
+    "esc",
+    "f1",
+    "f2",
+    "f3",
+    "f4",
+    "f5",
+    "f6",
+    "f7",
+    "f8",
+    "f9",
+    "f10",
+    "f11",
+    "f12",
+    "ins",
+    "canc",
+];
+const functional = ["Shift", "Ctrl", "Caps Lock", "Alt"];
 
 let actualLanguage = "en";
 
 class But {
     addition = "";
+
     code = "";
+
     sizeClasses = [
         "size_win",
         "size_shift",
@@ -25,8 +50,10 @@ class But {
             if (x.text === this.text || x.shText === this.text) {
                 return x.code;
             }
+            return "";
         })[0];
     }
+
     createButton() {
         const b = document.createElement("div");
 
@@ -44,8 +71,7 @@ class But {
 
             if (this.text === "win") {
                 const win = document.createElement("div");
-                win.innerHTML =
-                    "<img class='win_img' src='icons/win_icon.svg' alt='win'>";
+                win.innerHTML = "<img class='win_img' src='icons/win_icon.svg' alt='win'>";
                 b.append(win);
             } else {
                 const s = document.createElement("span");
@@ -94,8 +120,14 @@ function checkShift() {
 function checkCaps() {
     return capsIsPressed;
 }
-
+/* function getFocus(){
+    textarea.focus();
+    console.log(word.length);
+    textarea.selectionStart = word.length;
+}
+ */
 function writeMe(code) {
+    /*   getFocus(); */
     if (code === "ShiftLeft" || code === "ShiftRight") {
         if (!checkShift()) {
             [...base.children].forEach((a) => {
@@ -116,8 +148,8 @@ function writeMe(code) {
         if (!ctrlIsPressed) {
             [...base.children].forEach((a) => {
                 if (
-                    a.classList.contains("size_ctrl_l") ||
-                    a.classList.contains("size_ctrl_s")
+                    a.classList.contains("size_ctrl_l")
+                    || a.classList.contains("size_ctrl_s")
                 ) {
                     a.classList.add("pressed");
                 }
@@ -126,8 +158,8 @@ function writeMe(code) {
         } else {
             [...base.children].forEach((a) => {
                 if (
-                    a.classList.contains("size_ctrl_l") ||
-                    a.classList.contains("size_ctrl_s")
+                    a.classList.contains("size_ctrl_l")
+                    || a.classList.contains("size_ctrl_s")
                 ) {
                     a.classList.remove("pressed");
                 }
@@ -153,6 +185,9 @@ function writeMe(code) {
     } else if (code === "CapsLock") {
         if (!checkCaps()) capsIsPressed = true;
         else capsIsPressed = false;
+    } else if (code === "Escape") {
+        word = "";
+        textarea.innerHTML = "";
     } else {
         word += letterKey(code);
         textarea.innerHTML += letterKey(code);
@@ -161,14 +196,15 @@ function writeMe(code) {
 
 function letterKey(code) {
     let w = "";
-    let key = codes.filter((x) => {
+    const key = codes.filter((x) => {
         if (x.code === code) {
             return x;
         }
+        return "";
     })[0];
 
     if (letters.includes(key.text)) {
-        let lang = checkLanguage();
+        const lang = checkLanguage();
         if (lang === "en") {
             w = key.text;
         } else {
@@ -195,15 +231,27 @@ function letterKey(code) {
             }
         }
     }
+    if (code === "Enter") {
+        w = "\n";
+    }
+    if (code === "Tab") {
+        w = "    ";
+    }
+    if (code === "ArrowLeft" || code === "ArrowRight" || code === "ArrowUp" || code === "ArrowDown") {
+        w = key.text;
+    }
+    if (code === "MetaLeft") {
+        w = "";
+    }
+
     return w;
 }
 
 function upperLowerText(w) {
     if ((checkShift() && !checkCaps()) || (!checkShift() && checkCaps())) {
         return w.toUpperCase();
-    } else {
-        return w.toLowerCase();
     }
+    return w.toLowerCase();
 }
 
 function drawButtons() {
@@ -213,13 +261,14 @@ function drawButtons() {
     base.classList.add("base");
 
     textarea.classList.add("textarea");
+
     textarea.innerText = word;
 
     const langDiv = document.createElement("div");
-    const langDiv_span = document.createElement("span");
-    langDiv_span.innerText = actualLanguage;
+    const langDivSpan = document.createElement("span");
+    langDivSpan.innerText = actualLanguage;
     langDiv.classList.add("langdiv");
-    langDiv.append(langDiv_span);
+    langDiv.append(langDivSpan);
     langDiv.addEventListener("click", changeLanguage);
 
     base.append(textarea);
@@ -230,14 +279,17 @@ function drawButtons() {
 
         const a = b.createButton();
         base.append(a);
-        a.addEventListener("click", function() {
+        a.addEventListener("click", () => {
             b.pressMe(a);
+            if (b.text === "esc") {
+                writeMe(b.code.code);
+            }
         });
     });
 
     doubles.forEach((x, index) => {
         const b = new But(x, "size_standart");
-        b.addition = doubl_addit[index];
+        b.addition = doubladdit[index];
 
         const a = b.createButton();
         if (letters.includes(x)) {
@@ -249,7 +301,7 @@ function drawButtons() {
         }
         base.append(a);
 
-        a.addEventListener("click", function() {
+        a.addEventListener("click", () => {
             b.pressMe(a);
             writeMe(b.code.code);
         });
@@ -279,20 +331,20 @@ function drawButtons() {
     select();
 }
 
-function singleButton(text, size, base) {
+function singleButton(text, size, bas) {
     const f = new But(text, size);
-    const f_button = f.createButton();
-    f_button.addEventListener("click", function() {
-        f.pressMe(f_button);
+    const fButton = f.createButton();
+    fButton.addEventListener("click", () => {
+        f.pressMe(fButton);
         writeMe(f.code.code);
     });
-    if (text === "Shift" && shiftIsPressed) f_button.classList.add("pressed");
+    if (text === "Shift" && shiftIsPressed) fButton.classList.add("pressed");
     if (text === "Caps Lock" && capsIsPressed) {
-        f_button.classList.add("pressed");
+        fButton.classList.add("pressed");
     }
-    if (text === "Ctrl" && ctrlIsPressed) f_button.classList.add("pressed");
-    if (text === "Alt" && altIsPressed) f_button.classList.add("pressed");
-    base.append(f_button);
+    if (text === "Ctrl" && ctrlIsPressed) fButton.classList.add("pressed");
+    if (text === "Alt" && altIsPressed) fButton.classList.add("pressed");
+    bas.append(fButton);
 }
 
 function arrowsDiv() {
@@ -307,18 +359,23 @@ function arrowsDiv() {
     const downArrBut = new But("↓", "size_small").createButton();
 
     [leftArrBut, rightArrBut, upArrBut, downArrBut].forEach((x) =>
-        x.classList.add("button")
-    );
+        x.classList.add("button"));
     leftArrBut.classList.add("arrleftright");
     upArrBut.classList.add("arrup");
 
     downArrBut.classList.add("arrdown");
     rightArrBut.classList.add("arrleftright");
-    [upArrBut, downArrBut].forEach((x) => x.classList.add("arrupdown"));
+    [upArrBut, downArrBut].forEach((x) =>
+        x.classList.add("arrupdown"));
+    [leftArrBut, upArrBut, downArrBut, rightArrBut].forEach((x) =>
+        x.addEventListener("click", function (event) {
+            event.stopPropagation();
+            writeMe(this.dataset.code);
+        }));
     wrapper.append(leftArrBut, upArrBut, downArrBut, rightArrBut);
     return wrapper;
 }
-window.addEventListener("keydown", function(event) {
+window.addEventListener("keydown", (event) => {
     console.log(event.code);
 
     if (event.code === "ShiftLeft" || event.code === "ShiftRight") {
@@ -334,8 +391,9 @@ window.addEventListener("keydown", function(event) {
             shiftIsPressed = false;
         }
     } else {
-        let button = [...base.childNodes].filter(
-            (x) => x.dataset.code === event.code
+        const button = [...base.childNodes].filter(
+            (x) =>
+                x.dataset.code === event.code,
         )[0];
 
         console.log(button);
@@ -343,7 +401,7 @@ window.addEventListener("keydown", function(event) {
         writeMe(event.code);
     }
 });
-window.addEventListener("keyup", function(event) {
+window.addEventListener("keyup", (event) => {
     if (event.code === "ShiftLeft" || event.code === "ShiftRight") {
         [...base.children].forEach((a) => {
             if (a.classList.contains("size_shift")) {
@@ -352,43 +410,17 @@ window.addEventListener("keyup", function(event) {
         });
         shiftIsPressed = false;
     } else {
-        let button = [...base.childNodes].filter(
-            (x) => x.dataset.code === event.code
+        const button = [...base.childNodes].filter(
+            (x) =>
+                x.dataset.code === event.code,
         )[0];
 
         button.classList.remove("pressed");
     }
 });
 
-const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-const doubles = '\\!@#$%&/()=?*QWERTYUIOP{}>ASDFGHJKL:"ZXCVBNM~;.'.split(""); //46
-const doubl_addit = "Ё1234567890'+ЙЦУКЕНГШЩЗХЪ<ФЫВАПРОЛДЖЭЯЧСМИТЬБЮ,".split(""); //46
-
-const fs = [
-    "esc",
-    "f1",
-    "f2",
-    "f3",
-    "f4",
-    "f5",
-    "f6",
-    "f7",
-    "f8",
-    "f9",
-    "f10",
-    "f11",
-    "f12",
-    "ins",
-    "canc",
-];
-const functional = ["Shift", "Ctrl", "Caps Lock", "Alt"];
-
-console.log(
-    `doubles.length = ${doubles.length} vs addit.length = ${doubl_addit.length}`
-);
-
 function select() {
-    textarea.addEventListener("click", function() {
+    textarea.addEventListener("click", function () {
         console.log(`this.selectionStart: ${this.selectionStart}`);
         console.log(`this.selectionEnd: ${this.selectionEnd}`);
     });
