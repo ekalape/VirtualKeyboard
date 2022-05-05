@@ -129,20 +129,21 @@ function writeMe(code) {
         textarea.focus();
     });
     if (code === "ShiftLeft" || code === "ShiftRight") {
+        console.log(`INSIDE WRITEME: shift = ${shiftIsPressed}`);
         if (!checkShift()) {
+            shiftIsPressed = true;
             [...base.children].forEach((a) => {
                 if (a.classList.contains("size_shift")) {
                     a.classList.add("pressed");
                 }
             });
-            shiftIsPressed = true;
         } else {
+            shiftIsPressed = false;
             [...base.children].forEach((a) => {
                 if (a.classList.contains("size_shift")) {
                     a.classList.remove("pressed");
                 }
             });
-            shiftIsPressed = false;
         }
     } else if (code === "Control") {
         console.log(`control: ${code}`);
@@ -302,8 +303,10 @@ function letterKey(code) {
 
 function upperLowerText(w) {
     if ((checkShift() && !checkCaps()) || (!checkShift() && checkCaps())) {
+        console.log(`upperLowerText: shift = ${checkShift()}, caps = ${checkCaps()}`);
         return w.toUpperCase();
     }
+    console.log(`upperLowerText: shift = ${checkShift()}, caps = ${checkCaps()}`);
     return w.toLowerCase();
 }
 
@@ -314,8 +317,6 @@ function drawButtons() {
     if (textarea.style.height !== textAreaHeight) {
         textarea.style.height = textAreaHeight;
     }
-
-    console.log(textAreaHeight);
 
     base.classList.add("base");
 
@@ -436,10 +437,7 @@ function arrowsDiv() {
     return wrapper;
 }
 window.addEventListener("keydown", (event) => {
-    console.log(event.code);
-
     if (event.code === "ShiftLeft" || event.code === "ShiftRight") {
-        event.preventDefault();
         if (!checkShift()) {
             [...base.children].forEach((a) => {
                 if (a.classList.contains("size_shift")) {
@@ -447,8 +445,6 @@ window.addEventListener("keydown", (event) => {
                 }
             });
             shiftIsPressed = true;
-        } else {
-            shiftIsPressed = false;
         }
     } else if (["ArrowLeft", "ArrowUp", "ArrowDown", "ArrowRight"].includes(event.code)) {
         event.preventDefault();
