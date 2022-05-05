@@ -128,6 +128,9 @@ function checkCaps() {
  */
 function writeMe(code) {
     /*   getFocus(); */
+    textarea.addEventListener("blur", () => {
+        textarea.focus();
+    });
     if (code === "ShiftLeft" || code === "ShiftRight") {
         if (!checkShift()) {
             [...base.children].forEach((a) => {
@@ -187,11 +190,24 @@ function writeMe(code) {
         else capsIsPressed = false;
     } else if (code === "Escape") {
         word = "";
-        textarea.innerHTML = "";
+        textarea.value = "";
     } else {
-        word += letterKey(code);
-        textarea.innerHTML += letterKey(code);
+        word = insertLetter(code);
+        textarea.value = word;
     }
+}
+function insertLetter(code) {
+    const [start, end] = [textarea.selectionStart, textarea.selectionEnd];
+    let result = word;
+    const w = letterKey(code);
+    if (start === end && end === word.length) {
+        result += w;
+    } else {
+        textarea.setRangeText(`${w}`, start, end, "end");
+        result = textarea.value;
+    }
+    textarea.focus();
+    return result;
 }
 
 function letterKey(code) {
@@ -262,7 +278,7 @@ function drawButtons() {
 
     textarea.classList.add("textarea");
 
-    textarea.innerText = word;
+    textarea.value = word;
 
     const langDiv = document.createElement("div");
     const langDivSpan = document.createElement("span");
@@ -346,9 +362,9 @@ function singleButton(text, size, bas) {
     if (text === "Alt" && altIsPressed) fButton.classList.add("pressed");
     bas.append(fButton);
 }
-
+let wrapper;
 function arrowsDiv() {
-    const wrapper = document.createElement("div");
+    wrapper = document.createElement("div");
     wrapper.classList.add("arrow_wrapper");
     const leftArrBut = new But("←", "size_small").createButton();
 
@@ -390,14 +406,23 @@ window.addEventListener("keydown", (event) => {
         } else {
             shiftIsPressed = false;
         }
+    } else if (["ArrowLeft", "ArrowUp", "ArrowDown", "ArrowRight"].includes(event.code)) {
+        event.preventDefault();
+        const arrow = [...wrapper.children].filter((x) =>
+            x.dataset.code === event.code)[0];
+        arrow.classList.add("pressed");
+        writeMe(event.code);
     } else {
         const button = [...base.childNodes].filter(
             (x) =>
                 x.dataset.code === event.code,
         )[0];
+        if (event.code === "Tab" || event.code === "Control" || event.code === "Alt") {
+            event.preventDefault();
+        }
 
-        console.log(button);
         button.classList.add("pressed");
+
         writeMe(event.code);
     }
 });
@@ -409,6 +434,10 @@ window.addEventListener("keyup", (event) => {
             }
         });
         shiftIsPressed = false;
+    } else if (["ArrowLeft", "ArrowUp", "ArrowDown", "ArrowRight"].includes(event.code)) {
+        const arrow = [...wrapper.children].filter((x) =>
+            x.dataset.code === event.code)[0];
+        arrow.classList.remove("pressed");
     } else {
         const button = [...base.childNodes].filter(
             (x) =>
@@ -429,9 +458,11 @@ function select() {
 function changeLanguage() {
     if (actualLanguage === "en") {
         actualLanguage = "ru";
+        console.log(`switched to ru, word = ${word}`);
     } else {
         actualLanguage = "en";
+        console.log(`switched to en, word = ${word}`);
     }
-    document.body.innerHTML = "";
     drawButtons();
+    textarea.focus();
 }
