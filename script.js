@@ -21,16 +21,15 @@ const fs = [
     "ins",
     "canc",
 ];
-const functional = ["Shift", "Ctrl", "Caps Lock", "Alt"];
 
-let actualLanguage = "en";
+let actualLanguage = "en"; // localStorage!!!!!!!!!
 
 class But {
     addition = "";
 
     code = "";
 
-    sizeClasses = [
+    /*  sizeClasses = [
         "size_win",
         "size_shift",
         "size_ctrl_l",
@@ -40,7 +39,7 @@ class But {
         "size_capsenter",
         "size_tabdel",
         "size_small",
-    ];
+    ]; */
 
     constructor(text, size, addition = "") {
         this.text = text;
@@ -68,7 +67,6 @@ class But {
             b.append(s2);
         } else {
             b.classList.add("button");
-
             if (this.text === "win") {
                 const win = document.createElement("div");
                 win.innerHTML = "<img class='win_img' src='icons/win_icon.svg' alt='win'>";
@@ -87,7 +85,7 @@ class But {
     }
 
     pressMe(el) {
-        if (functional.includes(this.text)) {
+        if (["Shift", "Ctrl", "Caps Lock", "Alt"].includes(this.text)) {
             if (!this.isPressed) {
                 this.isPressed = true;
                 el.classList.add("pressed");
@@ -99,7 +97,11 @@ class But {
     }
 }
 
-window.addEventListener("load", drawButtons);
+window.addEventListener("load", () => {
+    readFromStorage();
+    console.log(actualLanguage);
+    drawButtons();
+});
 let textarea;
 let base;
 let shiftIsPressed = false;
@@ -108,6 +110,7 @@ let ctrlIsPressed = false;
 let altIsPressed = false;
 
 let word = "";
+let textAreaHeight = "200px";
 
 function checkLanguage() {
     return actualLanguage;
@@ -120,14 +123,8 @@ function checkShift() {
 function checkCaps() {
     return capsIsPressed;
 }
-/* function getFocus(){
-    textarea.focus();
-    console.log(word.length);
-    textarea.selectionStart = word.length;
-}
- */
+
 function writeMe(code) {
-    /*   getFocus(); */
     textarea.addEventListener("blur", () => {
         textarea.focus();
     });
@@ -148,6 +145,7 @@ function writeMe(code) {
             shiftIsPressed = false;
         }
     } else if (code === "Control") {
+        console.log(`control: ${code}`);
         if (!ctrlIsPressed) {
             [...base.children].forEach((a) => {
                 if (
@@ -169,7 +167,8 @@ function writeMe(code) {
             });
             ctrlIsPressed = false;
         }
-    } else if (code === "AltLeft") {
+    } else if (code === "AltLeft" || code === "AltRight") {
+        console.log(`alt: ${code}`);
         if (!altIsPressed) {
             [...base.children].forEach((a) => {
                 if (a.classList.contains("size_alt")) {
@@ -186,11 +185,25 @@ function writeMe(code) {
             altIsPressed = false;
         }
     } else if (code === "CapsLock") {
-        if (!checkCaps()) capsIsPressed = true;
-        else capsIsPressed = false;
+        const cl = [...base.childNodes].filter(
+            (x) =>
+                x.dataset.code === "CapsLock",
+        )[0];
+        if (!checkCaps()) {
+            capsIsPressed = true;
+
+            if (capsIsPressed) cl.classList.add("pressed");
+        } else {
+            capsIsPressed = false;
+            cl.classList.remove("pressed");
+        }
     } else if (code === "Escape") {
         word = "";
         textarea.value = "";
+    } else if (code === "Backspace" || code === "Delete") {
+        console.log(code);
+        word = deleteLetter(code);
+        textarea.value = word;
     } else {
         word = insertLetter(code);
         textarea.value = word;
@@ -208,6 +221,28 @@ function insertLetter(code) {
     }
     textarea.focus();
     return result;
+}
+function deleteLetter(code) {
+    const [start, end] = [textarea.selectionStart, textarea.selectionEnd];
+
+    if (code === "Backspace") {
+        if (start === 0) {
+            textarea.setRangeText("", start, end, "end");
+            textarea.focus();
+            return textarea.value;
+        }
+
+        textarea.setRangeText("", start - 1, end, "end");
+        textarea.focus();
+        return textarea.value;
+    }
+    if (code === "Delete") {
+        console.log(`start: ${start}, end: ${end}, word.length = ${word.length}`);
+        textarea.setRangeText("", start, end + 1, "end");
+        textarea.focus();
+        return textarea.value;
+    }
+    return textarea.value;
 }
 
 function letterKey(code) {
@@ -258,6 +293,8 @@ function letterKey(code) {
     }
     if (code === "MetaLeft") {
         w = "";
+    } if (code === "Space") {
+        w = " ";
     }
 
     return w;
@@ -274,6 +311,12 @@ function drawButtons() {
     document.body.innerHTML = "";
     base = document.createElement("div");
     textarea = document.createElement("textarea");
+    if (textarea.style.height !== textAreaHeight) {
+        textarea.style.height = textAreaHeight;
+    }
+
+    console.log(textAreaHeight);
+
     base.classList.add("base");
 
     textarea.classList.add("textarea");
@@ -297,7 +340,8 @@ function drawButtons() {
         base.append(a);
         a.addEventListener("click", () => {
             b.pressMe(a);
-            if (b.text === "esc") {
+            if (b.text === "esc" || b.text === "canc") {
+                console.log(b.text);
                 writeMe(b.code.code);
             }
         });
@@ -412,17 +456,44 @@ window.addEventListener("keydown", (event) => {
             x.dataset.code === event.code)[0];
         arrow.classList.add("pressed");
         writeMe(event.code);
+    } else if (["Control", "ControlLeft", "ControlRight"].includes(event.code)) {
+        event.preventDefault();
+        const b = [...base.childNodes].filter(
+            (x) =>
+                x.dataset.code === "Control",
+        );
+        b.forEach((a) =>
+            a.classList.add("pressed"));
+    } else if (["Alt", "AltLeft", "AltRight"].includes(event.code)) {
+        event.preventDefault();
+        const f = [...base.childNodes].filter(
+            (x) =>
+                x.dataset.code === "AltLeft",
+        );
+        f.forEach((a) =>
+            a.classList.add("pressed"));
+    } else if (event.code === "CapsLock") {
+        const cl = [...base.childNodes].filter(
+            (x) =>
+                x.dataset.code === event.code,
+        )[0];
+
+        if (capsIsPressed) cl.classList.add("pressed");
+        else cl.classList.remove("pressed");
+        writeMe(event.code);
     } else {
         const button = [...base.childNodes].filter(
             (x) =>
                 x.dataset.code === event.code,
-        )[0];
-        if (event.code === "Tab" || event.code === "Control" || event.code === "Alt") {
+        );
+
+        if (["Tab", "Backspace", "Delete"].includes(event.code)) {
             event.preventDefault();
         }
 
-        button.classList.add("pressed");
-
+        console.log(`btn: ${event.code}`);
+        button.forEach((a) =>
+            a.classList.add("pressed"));
         writeMe(event.code);
     }
 });
@@ -438,24 +509,42 @@ window.addEventListener("keyup", (event) => {
         const arrow = [...wrapper.children].filter((x) =>
             x.dataset.code === event.code)[0];
         arrow.classList.remove("pressed");
-    } else {
-        const button = [...base.childNodes].filter(
+    } else if (["Control", "ControlLeft", "ControlRight"].includes(event.code)) {
+        const b = [...base.childNodes].filter(
+            (x) =>
+                x.dataset.code === "Control",
+        );
+        b.forEach((a) =>
+            a.classList.remove("pressed"));
+    } else if (["Alt", "AltLeft", "AltRight"].includes(event.code)) {
+        const f = [...base.childNodes].filter(
+            (x) =>
+                x.dataset.code === "AltLeft",
+        );
+        f.forEach((a) =>
+            a.classList.remove("pressed"));
+    } else if (event.code === "CapsLock") {
+        const cl = [...base.childNodes].filter(
             (x) =>
                 x.dataset.code === event.code,
         )[0];
 
-        button.classList.remove("pressed");
+        if (capsIsPressed) cl.classList.add("pressed");
+        else cl.classList.remove("pressed");
+    } else {
+        const button = [...base.childNodes].filter(
+            (x) =>
+                x.dataset.code === event.code,
+        );
+
+        button.forEach((a) =>
+            a.classList.remove("pressed"));
     }
+    textarea.focus();
 });
 
-function select() {
-    textarea.addEventListener("click", function () {
-        console.log(`this.selectionStart: ${this.selectionStart}`);
-        console.log(`this.selectionEnd: ${this.selectionEnd}`);
-    });
-}
-
 function changeLanguage() {
+    textAreaResize();
     if (actualLanguage === "en") {
         actualLanguage = "ru";
         console.log(`switched to ru, word = ${word}`);
@@ -465,4 +554,33 @@ function changeLanguage() {
     }
     drawButtons();
     textarea.focus();
+}
+function textAreaResize() {
+    console.log(textAreaHeight);
+    if (textarea.style.height !== textAreaHeight) {
+        textAreaHeight = textarea.style.height;
+    }
+}
+function addToStorage() {
+    localStorage.setItem("keyboardLanguage", actualLanguage);
+/* localStorage.setItem("keyboardHeight", textAreaHeight) */
+}
+function readFromStorage() {
+    if (localStorage.getItem("keyboardLanguage")) {
+        actualLanguage = localStorage.getItem("keyboardLanguage");
+    }
+/* if(localStorage.getItem("keyboardHeight")){
+    textAreaHeight = localStorage.getItem("textAreaHeight");
+} */
+}
+
+window.addEventListener("beforeunload", () =>
+    addToStorage());
+
+/* '''''''''''''''delete'''''''''''' */
+function select() {
+    textarea.addEventListener("click", function () {
+        console.log(`this.selectionStart: ${this.selectionStart}`);
+        console.log(`this.selectionEnd: ${this.selectionEnd}`);
+    });
 }

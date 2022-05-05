@@ -118,6 +118,7 @@ body {
   font-family: "Jura", sans-serif;
   font-weight: 500;
   font-size: 22px;
+  resize: vertical;
 }
 .textarea:focus-within {
   border: 2px solid rgb(235, 13, 255);
