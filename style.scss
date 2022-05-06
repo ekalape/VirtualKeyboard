@@ -90,12 +90,24 @@ $dark_lighter_sec:rgb(71, 55, 78);
 .size_standart {
     width: 52px;
     height: 52px;
+
+    &:hover {
+        cursor: pointer;
+        border-color: rgba(119, 1, 133, 0.3);
+        box-shadow: 0px 0px 10px rgba(55, 12, 59, 0.9);
+        background-image: linear-gradient(300deg, 300deg, rgb(21, 16, 32), rgb(52, 36, 59));
+
+        span {
+            color: $color_light_pr;
+            text-shadow: 1px 0px 2px $color_accent, 0px 1px 2px $color_accent;
+        }
+    }
 }
 
 /* ------------------------------------------- */
 
 body {
-    @include sizing(80vw, 80vh);
+    @include sizing(1000px, 80vh);
     margin: auto;
     @include flex();
     font-family: Georgia, 'Times New Roman', Times, serif;
@@ -137,6 +149,10 @@ body {
     font-weight: 500;
     font-size: 22px;
     resize: vertical;
+
+    &::selection {
+        background-color: $color_accent;
+    }
 
 
     &:focus-within {
@@ -195,7 +211,6 @@ body {
         background-image: linear-gradient(300deg, 300deg, rgb(21, 16, 32), rgb(52, 36, 59));
 
         span {
-            /* color: rgba(235, 13, 255, 0.507); */
             color: $color_light_pr;
             text-shadow: 1px 0px 2px $color_accent, 0px 1px 2px $color_accent;
         }
@@ -359,4 +374,16 @@ body {
 
 .arrdown {
     grid-row: 2/2;
+}
+
+.explanation_block {
+    @include sizing(770px, auto);
+    @include borderUpLeft(2px);
+    margin: 20px 60px auto auto;
+
+
+    background-color: $color_light_pr;
+    padding: 10px;
+    font-size: 18px;
+    text-align: justify;
 }

@@ -99,7 +99,8 @@ class But {
 
 window.addEventListener("load", () => {
     readFromStorage();
-    console.log(actualLanguage);
+
+    console.log(window.navigator);
     drawButtons();
 });
 let textarea;
@@ -108,6 +109,8 @@ let shiftIsPressed = false;
 let capsIsPressed = false;
 let ctrlIsPressed = false;
 let altIsPressed = false;
+
+let [shiftDown, altdown] = [false, false];
 
 let word = "";
 let textAreaHeight = "200px";
@@ -310,6 +313,19 @@ function upperLowerText(w) {
     return w.toLowerCase();
 }
 
+function explanation() {
+    const block = document.createElement("div");
+    block.classList.add("explanation_block");
+    const explanationText = document.createElement("p");
+    block.append(explanationText);
+    if (actualLanguage === "ru") {
+        explanationText.innerText = "Привет, друг!\n\nЭта клавиатура была создана для ОС Windows.\n\nКлавиши 'Shift', 'Alt' и 'Ctrl' на виртуальной клавиатуре после щелчка мышью остаются нажатыми до тех пор, пока не будут нажаты снова. Это сделано для большего удобства использования.\n\n Для переключения языка можно использовать кнопку под клавиатурой или комбинацию 'Shift+Alt' на физической клавиатуре.\n\n Клавиша 'esc' на виртуальной клавиатуре предназначена для очистки текстовой области.\n\n Спасибо!";
+    } else {
+        explanationText.innerText = "Hello friend!\n\n This keyboard was created for WindowsOS.\n\nKeys 'Shift', 'Alt' and 'Ctrl' on the virtual keyboard after being clicked with a mouse will remain pressed until not clicked again. It was made for more ease of use.\n\n You can use a button under the keyboard for switch language or combination 'Shift+Alt' on the fisical keyboard.\n\n Key 'esc' on the virtual keyboard is for clearing the text area.\n\n Thank you!";
+    }
+    return block;
+}
+
 function drawButtons() {
     document.body.innerHTML = "";
     base = document.createElement("div");
@@ -334,6 +350,7 @@ function drawButtons() {
     base.append(textarea);
     base.append(langDiv);
     document.body.append(base);
+    document.body.append(explanation());
     fs.forEach((x) => {
         const b = new But(x, "size_small");
 
@@ -436,8 +453,15 @@ function arrowsDiv() {
     wrapper.append(leftArrBut, upArrBut, downArrBut, rightArrBut);
     return wrapper;
 }
+
 window.addEventListener("keydown", (event) => {
+    if (["F1", "F2", "F3", "F4", "F5", "F6", "F7", "F8", "F9", "F10", "F11", "F12", "Insert"].includes(event.code)) {
+        return;
+    }
+    event.preventDefault();
     if (event.code === "ShiftLeft" || event.code === "ShiftRight") {
+        shiftDown = true;
+        shiftAlt();
         if (!checkShift()) {
             [...base.children].forEach((a) => {
                 if (a.classList.contains("size_shift")) {
@@ -447,13 +471,13 @@ window.addEventListener("keydown", (event) => {
             shiftIsPressed = true;
         }
     } else if (["ArrowLeft", "ArrowUp", "ArrowDown", "ArrowRight"].includes(event.code)) {
-        event.preventDefault();
+        /*  event.preventDefault(); */
         const arrow = [...wrapper.children].filter((x) =>
             x.dataset.code === event.code)[0];
         arrow.classList.add("pressed");
         writeMe(event.code);
     } else if (["Control", "ControlLeft", "ControlRight"].includes(event.code)) {
-        event.preventDefault();
+        /*  event.preventDefault(); */
         const b = [...base.childNodes].filter(
             (x) =>
                 x.dataset.code === "Control",
@@ -461,7 +485,9 @@ window.addEventListener("keydown", (event) => {
         b.forEach((a) =>
             a.classList.add("pressed"));
     } else if (["Alt", "AltLeft", "AltRight"].includes(event.code)) {
-        event.preventDefault();
+        altdown = true;
+        shiftAlt();
+        /*  event.preventDefault(); */
         const f = [...base.childNodes].filter(
             (x) =>
                 x.dataset.code === "AltLeft",
@@ -484,7 +510,7 @@ window.addEventListener("keydown", (event) => {
         );
 
         if (["Tab", "Backspace", "Delete"].includes(event.code)) {
-            event.preventDefault();
+            /*  event.preventDefault(); */
         }
 
         console.log(`btn: ${event.code}`);
@@ -495,6 +521,8 @@ window.addEventListener("keydown", (event) => {
 });
 window.addEventListener("keyup", (event) => {
     if (event.code === "ShiftLeft" || event.code === "ShiftRight") {
+        shiftDown = false;
+        shiftAlt();
         [...base.children].forEach((a) => {
             if (a.classList.contains("size_shift")) {
                 a.classList.remove("pressed");
@@ -513,6 +541,8 @@ window.addEventListener("keyup", (event) => {
         b.forEach((a) =>
             a.classList.remove("pressed"));
     } else if (["Alt", "AltLeft", "AltRight"].includes(event.code)) {
+        altdown = false;
+        shiftAlt();
         const f = [...base.childNodes].filter(
             (x) =>
                 x.dataset.code === "AltLeft",
@@ -538,7 +568,12 @@ window.addEventListener("keyup", (event) => {
     }
     textarea.focus();
 });
-
+function shiftAlt() {
+    if (shiftDown && altdown) {
+        console.log(`shift: ${shiftDown}, alt: ${altdown}`);
+        changeLanguage();
+    }
+}
 function changeLanguage() {
     textAreaResize();
     if (actualLanguage === "en") {
