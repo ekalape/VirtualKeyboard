@@ -100,7 +100,6 @@ class But {
 window.addEventListener("load", () => {
     readFromStorage();
 
-    console.log(window.navigator);
     drawButtons();
 });
 let textarea;
@@ -132,7 +131,6 @@ function writeMe(code) {
         textarea.focus();
     });
     if (code === "ShiftLeft" || code === "ShiftRight") {
-        console.log(`INSIDE WRITEME: shift = ${shiftIsPressed}`);
         if (!checkShift()) {
             shiftIsPressed = true;
             [...base.children].forEach((a) => {
@@ -149,7 +147,6 @@ function writeMe(code) {
             });
         }
     } else if (code === "Control") {
-        console.log(`control: ${code}`);
         if (!ctrlIsPressed) {
             [...base.children].forEach((a) => {
                 if (
@@ -172,7 +169,6 @@ function writeMe(code) {
             ctrlIsPressed = false;
         }
     } else if (code === "AltLeft" || code === "AltRight") {
-        console.log(`alt: ${code}`);
         if (!altIsPressed) {
             [...base.children].forEach((a) => {
                 if (a.classList.contains("size_alt")) {
@@ -205,7 +201,6 @@ function writeMe(code) {
         word = "";
         textarea.value = "";
     } else if (code === "Backspace" || code === "Delete") {
-        console.log(code);
         word = deleteLetter(code);
         textarea.value = word;
     } else {
@@ -241,7 +236,6 @@ function deleteLetter(code) {
         return textarea.value;
     }
     if (code === "Delete") {
-        console.log(`start: ${start}, end: ${end}, word.length = ${word.length}`);
         textarea.setRangeText("", start, end + 1, "end");
         textarea.focus();
         return textarea.value;
@@ -306,10 +300,9 @@ function letterKey(code) {
 
 function upperLowerText(w) {
     if ((checkShift() && !checkCaps()) || (!checkShift() && checkCaps())) {
-        console.log(`upperLowerText: shift = ${checkShift()}, caps = ${checkCaps()}`);
         return w.toUpperCase();
     }
-    console.log(`upperLowerText: shift = ${checkShift()}, caps = ${checkCaps()}`);
+
     return w.toLowerCase();
 }
 
@@ -359,7 +352,6 @@ function drawButtons() {
         a.addEventListener("click", () => {
             b.pressMe(a);
             if (b.text === "esc" || b.text === "canc") {
-                console.log(b.text);
                 writeMe(b.code.code);
             }
         });
@@ -406,7 +398,6 @@ function drawButtons() {
             base.append(arrowsDiv());
         }
     });
-    select();
 }
 
 function singleButton(text, size, bas) {
@@ -446,7 +437,7 @@ function arrowsDiv() {
     [upArrBut, downArrBut].forEach((x) =>
         x.classList.add("arrupdown"));
     [leftArrBut, upArrBut, downArrBut, rightArrBut].forEach((x) =>
-        x.addEventListener("click", function (event) {
+        x.addEventListener("click", function onclickArrow(event) {
             event.stopPropagation();
             writeMe(this.dataset.code);
         }));
@@ -513,7 +504,6 @@ window.addEventListener("keydown", (event) => {
             /*  event.preventDefault(); */
         }
 
-        console.log(`btn: ${event.code}`);
         button.forEach((a) =>
             a.classList.add("pressed"));
         writeMe(event.code);
@@ -570,7 +560,6 @@ window.addEventListener("keyup", (event) => {
 });
 function shiftAlt() {
     if (shiftDown && altdown) {
-        console.log(`shift: ${shiftDown}, alt: ${altdown}`);
         changeLanguage();
     }
 }
@@ -578,40 +567,25 @@ function changeLanguage() {
     textAreaResize();
     if (actualLanguage === "en") {
         actualLanguage = "ru";
-        console.log(`switched to ru, word = ${word}`);
     } else {
         actualLanguage = "en";
-        console.log(`switched to en, word = ${word}`);
     }
     drawButtons();
     textarea.focus();
 }
 function textAreaResize() {
-    console.log(textAreaHeight);
     if (textarea.style.height !== textAreaHeight) {
         textAreaHeight = textarea.style.height;
     }
 }
 function addToStorage() {
     localStorage.setItem("keyboardLanguage", actualLanguage);
-/* localStorage.setItem("keyboardHeight", textAreaHeight) */
 }
 function readFromStorage() {
     if (localStorage.getItem("keyboardLanguage")) {
         actualLanguage = localStorage.getItem("keyboardLanguage");
     }
-/* if(localStorage.getItem("keyboardHeight")){
-    textAreaHeight = localStorage.getItem("textAreaHeight");
-} */
 }
 
 window.addEventListener("beforeunload", () =>
     addToStorage());
-
-/* '''''''''''''''delete'''''''''''' */
-function select() {
-    textarea.addEventListener("click", function () {
-        console.log(`this.selectionStart: ${this.selectionStart}`);
-        console.log(`this.selectionEnd: ${this.selectionEnd}`);
-    });
-}
