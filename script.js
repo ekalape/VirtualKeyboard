@@ -1,8 +1,8 @@
 import codes from './codes.js';
 
 const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-const doubles = '\\!@#$%&/()=?*QWERTYUIOP{}>ASDFGHJKL:"ZXCVBNM~;.'.split(''); // 46
-const doubladdit = "Ё1234567890'+ЙЦУКЕНГШЩЗХЪ<ФЫВАПРОЛДЖЭЯЧСМИТЬБЮ,".split(''); // 46
+const doubles = '\\!@#$%&/()=?*QWERTYUIOP{}>ASDFGHJKL:"ZXCVBNM~;.'.split('');
+const doubladdit = "Ё1234567890'+ЙЦУКЕНГШЩЗХЪ<ФЫВАПРОЛДЖЭЯЧСМИТЬБЮ,".split('');
 
 const fs = [
   'esc',
